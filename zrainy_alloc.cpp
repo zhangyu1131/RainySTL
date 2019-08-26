@@ -47,6 +47,42 @@ namespace ZRainySTL{
 		return ptr;
 	}
 
+	void* alloc::refill(size_t bytes){
+		size_t nobjs = 20;
+		char * chunk = chunk_alloc(bytes, nobjs);
+		obj** my_free_list = 0;
+		obj* result = 0;
+		obj* next = 0, *current = 0;
+		
+		//如果只获得一个区块，这个区块就分配给调用者用，free list不增加新节点
+		if(nobjs == 1){
+			return chunk;
+		}
+		//如果获得的区块超过一个，就准备调整对应的free-list节点
+		my_free_list = free_list + FREELIST_INDEX(bytes);//选中要调整的节点
+		result = (obj*)chunk;//将第一个节点分给result，准备返回给请求方
+
+		*my_free_list = next = (obj*)(chunk + bytes);
+		//从第二个节点开始纳入free-list
+		for(size_t i = 1; ; i++){
+			current = next;
+			next = (obj*)((char*)next + bytes);//TODO 为什么要转成char*？
+			                                   //暂时理解：因为obj*是一个union指针，这里强制转成char*表示用obj的第二个字段client_data读取，
+											   //表示char数组的首地址，即next的地址，用地址加bytes即得到下一个obj*。
+			if(i == nobjs - 1){
+				current->next = 0;
+				break;
+			}else{
+				current->next = next;
+			}
+		}
+		return result;
+	}
+
+
+	char* alloc::chunk_alloc(size_t size, size_t& nobjs){
+	}
+
 
 
 }//end namespace ZRainySTL
