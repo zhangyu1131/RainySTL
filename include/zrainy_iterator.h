@@ -123,5 +123,54 @@ namespace ZRainySTL{
 	difference_type(const Iterator& It){
 		return static_cast<typename iterator_traits<Iterator>::difference_type*>(0);
 	}
+
+
+	//__distance方法，根据不同iterator_type有不同实现，这也是iterator_type存在的意义
+	template <class InputIterator>
+	inline typename iterator_traits<InputIterator>::difference_type
+	__distance(InputIterator first, InputIterator last, input_iterator_tag){
+		typename iterator_traits<InputIterator>::difference_type n = 0;
+		while(first != last){
+			++first;
+			++n;
+		}
+		return n;
+	}
+	template <class RandomAccessIterator>
+	inline typename iterator_traits<RandomAccessIterator>::difference_type
+	__distance(RandomAccessIterator first, RandomAccessIterator last, random_access_iterator_tag){
+		return last - first;
+	}
+
+	//对外提供的distance方法，内在实现是靠萃取器和函数重载的方式来调用上述两个不同的__distance方法。
+	template <class Iterator>
+	inline typename iterator_traits<Iterator>::difference_type
+	distance(Iterator first, Iterator last){
+		return __distance(first, last, iterator_category(first));
+	}
+	
+
+	//以下是类似的advance方法，用来将迭代器向前移动n步
+	template <class InputIterator, class Distance>
+	inline void __advance(InputIterator& i, Distance n, input_iterator_tag){
+		while(n--) ++i;
+	}
+	template <class BidirectionIterator, class Distance>
+	inline void __advance(BidirectionIterator& i, Distance n, bidirectional_iterator_tag){
+		if(n > 0){
+			while(n--) ++i;
+		}else{
+			while(n++) --i;
+		}
+	}
+	template <class RandomAccessIterator, class Distance>
+	inline void __advance(RandomAccessIterator& i, Distance n, random_access_iterator_tag){
+		i += n;
+	}
+	//对外提供的真正advance方法
+	template <class Iterator, class Distance>
+	inline void advance(Iterator& i, Distance n){
+		__advance(i, n, iterator_category(i));
+	}
 }//end namespace ZRainySTL
 #endif
