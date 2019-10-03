@@ -9,6 +9,7 @@
 #ifndef ZRAINY_CONSTRUCT_H_
 #define ZRAINY_CONSTRUCT_H_
 
+#include "zrainy_iterator.h"
 #include <new> //要使用placement new，必须包含该头文件
 
 
@@ -29,11 +30,15 @@ namespace ZRainySTL{
 	//接收一对迭代器的析构函数
 	template<class ForwardIterator>
 	inline void destroy(ForwardIterator first, ForwardIterator last){
-		for(; first != last; ++first){
-			destroy(& *first);
-		}
+		__destroy(first, last, value_type(first));
+		//for(; first != last; ++first){
+			//destroy(& *first);
+		//}
 	}
-
+	//
+	template <class ForwardIterator, class T>
+	inline void __destroy(ForwardIterator first, ForwardIterator last, T*){
+	}
 	//TODO 尚未针对traits型别进行完善，后续引入traits后完善。
 
 }// end namespace ZRainySTL
