@@ -9,7 +9,8 @@
 #ifndef ZRAINY_CONSTRUCT_H_
 #define ZRAINY_CONSTRUCT_H_
 
-#include "zrainy_iterator.h"
+//#include "zrainy_iterator.h"
+#include "zrainy_type_traits.h"
 #include <new> //要使用placement new，必须包含该头文件
 
 
@@ -27,19 +28,22 @@ namespace ZRainySTL{
 	}
 
 
-	//接收一对迭代器的析构函数
+	//接收一对迭代器的析构函数，根据_type_traits进行不同调用
 	template<class ForwardIterator>
 	inline void destroy(ForwardIterator first, ForwardIterator last){
-		__destroy(first, last, value_type(first));
-		//for(; first != last; ++first){
-			//destroy(& *first);
-		//}
+		typedef typename _type_traits<ForwardIterator>::is_POD_type is_POD_type;
+		__destroy(first, last, is_POD_type());
 	}
-	//
-	template <class ForwardIterator, class T>
-	inline void __destroy(ForwardIterator first, ForwardIterator last, T*){
+
+	template <class ForwardIterator>
+	inline void __destroy(ForwardIterator first, ForwardIterator last, _true_type){}
+
+	template <class ForwardIterator>
+	inline void __destroy(ForwardIterator first, ForwardIterator last, _false_type){
+		for(; first != last; ++first){
+			destroy(& *first);
+		}
 	}
-	//TODO 尚未针对traits型别进行完善，后续引入traits后完善。
 
 }// end namespace ZRainySTL
 
