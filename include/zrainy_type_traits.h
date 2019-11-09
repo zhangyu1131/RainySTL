@@ -5,7 +5,7 @@
  */
 
 #ifndef _ZRAINY_TYPE_TRAITS_
-#define _ZRAINY_TYPE_TRAITS
+#define _ZRAINY_TYPE_TRAITS_
 
 namespace ZRainySTL{
 
