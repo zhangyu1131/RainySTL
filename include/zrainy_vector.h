@@ -6,6 +6,7 @@
 #include "zrainy_allocate.h"
 #include "zrainy_construct.h"
 #include "zrainy_iterator.h"
+#include "zrainy_uninitialized.h"
 
 
 namespace ZRainySTL{
@@ -34,10 +35,10 @@ namespace ZRainySTL{
 	public:
 		//构造和析构函数,TODO
 		zvector():start(nullptr), finish(nullptr), end_of_storage(nullptr){}
-		zvector(size_type n, const T& value);
+		zvector(const size_type n, const T& value);
 		~zvector(){
 			destroy(start, finish);
-			deallocate();
+			_deallocate();
 		}
 
 		//基本操作
@@ -50,11 +51,17 @@ namespace ZRainySTL{
 		void pop_back();
 	
 	private:
-		void deallocate(){
+		void _deallocate(){
 			if(start){
 				data_allocator::deallocate(start, end_of_storage - start);
 			}
 		}
+
+		void _fill_initialize(const size_type n, const T& value);
+
+		iterator _alloc_and_fill(size_type n, const T& value);
+
+		void _insert_aux(iterator position, const T& value);
 		
 	};// end class zvector
 }// end namespace ZRainySTL
