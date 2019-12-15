@@ -1,6 +1,7 @@
-#include "../include/zrainy_vector.h"
-#include <algorithm>//为了使用copy_backward暂时加这个头文件，后面自行实现，TODO
+#ifndef _ZRAINY_VECTOR_IMP_H
+#define _ZRAINY_VECTOR_IMP_H
 
+#include <algorithm>//为了使用copy_backward暂时加这个头文件，后面自行实现，TODO
 
 namespace ZRainySTL{
 
@@ -93,4 +94,4 @@ namespace ZRainySTL{
 	}
 
 } // end namespace ZRainySTL
-
+#endif //end ifndef
