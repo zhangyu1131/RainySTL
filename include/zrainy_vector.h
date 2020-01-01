@@ -80,7 +80,7 @@ namespace ZRainySTL{
 		}
 
 		iterator _alloc_and_fill(size_type n, const T& value){
-			iterator result = data_allocator::allocator(n);
+			iterator result = data_allocator::allocate(n);
 			uninitialized_fill_n(result, n, value);
 			return result;
 		}
@@ -100,9 +100,9 @@ namespace ZRainySTL{
 				//没有可用空间了，则需要新开辟空间
 				//开辟新空间的长度默认是原长度的两倍
 				const size_type old_size = size();
-			    const size_type new_size = old_size != 0 ? 2 * old_size : 1;
+			    const size_type new_size = (old_size != 0) ? 2 * old_size : 1;
 
-				iterator new_start = data_allocator::allocator(new_size);
+				iterator new_start = data_allocator::allocate(new_size);
 				iterator new_finish = new_start;
 
 				try{

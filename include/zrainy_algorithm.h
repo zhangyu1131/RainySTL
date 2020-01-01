@@ -7,6 +7,8 @@
 #ifndef ZRAINY_ALGORITHM_H
 #define ZRAINY_ALGORITHM_H
 
+#include <cstring>
+
 namespace ZRainySTL{
 	template <class ForwardIterator, class T>
 	void
