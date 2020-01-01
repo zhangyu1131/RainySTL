@@ -1,3 +1,11 @@
+/*
+ * zvetor的声明和定义文件
+ * 由于vector是尝试的第一个容器，所以这里将类方法的声明和定义都写在了一个文件里。后续进行分离。
+ * 先这么做的原因是为了避免模板类的声明和定义不在同一个文件里而引入的复杂性。
+ * 
+ * by ZRainy
+ */
+
 #ifndef _ZRAINY_VECTOR_H_
 #define _ZRAINY_VECTOR_H_
 
@@ -46,11 +54,20 @@ namespace ZRainySTL{
 		}
 
 		//基本操作
-		iterator begin(){return start;}
-		iterator end(){return finish;}
-		size_type size(){return (size_type)(finish - start);}
+		iterator begin() const {return start;}
+		iterator end() const {return finish;}
+		size_type size() const {return (size_type)(end() - begin());}
+		size_type capacity() const {
+		   return (size_type) (end_of_storage - begin());
+		}	   
 		bool empty() const {return begin() == end();}
+		reference operator[] (size_type n) {
+			return *(begin() + n);
+		}
+		reference front() { return *begin(); }
+		reference back() { return *(end() - 1); }
 
+		//添加和删除相关操作
 		void push_back(const T& v){
 			//判断是否有空余空间
 			if (finish != end_of_storage) {
