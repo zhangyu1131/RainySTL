@@ -11,6 +11,9 @@ TEST(TestVector, FirstTest){
 
 	zv.push_back(2);
 	EXPECT_EQ(2, zv.size());
+
+	zv.pop_back();
+	EXPECT_EQ(1, zv.size());
 }
 
 #endif // end ifndef _TEST_VECTOR_H
